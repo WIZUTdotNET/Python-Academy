@@ -1,57 +1,43 @@
 import parsemod as pd
-from reportlab import *
-from reportlab.lib.styles import *
-from reportlab.lib.enums import TA_JUSTIFY
-from reportlab.platypus.doctemplate import SimpleDocTemplate
-from reportlab.lib import pagesizes
-from reportlab.lib.pagesizes import portrait
-from reportlab.pdfbase import pdfpattern
-from reportlab.platypus.para import Paragraph
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import cm, mm, inch, pica
+
+"""
+Interesting pdf - creation : 
+
+http://www.devshed.com/c/a/Python/Python-for-PDF-Generation/
+"""
 
 
 
 lista_ocen = pd.parse_edziekanat_grades("edziekanat_przyklad.txt")
-print (lista_ocen)
 
-"""
-Przemek : tutaj moja proba tworzenia raportu w formacie pdf
+#Create new pdf document
+pdf = Canvas("test.pdf", pagesize = letter)
 
-https://stackoverflow.com/questions/10112244/convert-plain-text-to-pdf-in-python
-
-# ------------------------------------
-# Styles
-# ------------------------------------
+#Set font and draw title
+pdf.setFont("Courier-Bold", 14)
+pdf.setStrokeColorRGB(1, 0, 0)
+pdf.drawString(inch * 1, inch * 10, lista_ocen[0][0])
 
 
-
-styleSheet = getSampleStyleSheet()
-mystyle = ParagraphStyle(name='normal',fontName='Courier',
-                         fontSize=10, 
-                         alignment=TA_JUSTIFY, 
-                         leading=1.2*12,
-                         parent=styleSheet['Normal'])       
-
-#=====================================================================================       
-model_report = 'report.txt'
+#set font for rows with grades
+pdf.setFont("Courier-Bold", 12)
+pdf.setStrokeColorRGB(1, 0, 0)
+#create handle used to add lines to pdf 
+table = pdf.beginText(inch * 1, inch * 9)
 
 
-# Create document for writing to pdf   
-doc = SimpleDocTemplate(str(pdfpattern),  
-                        rightMargin=40, leftMargin=40, 
-                        topMargin=40, bottomMargin=25,
-                        pageSize=pagesizes.A4)
-doc.pagesize = portrait(pagesizes.A4) 
+for x in lista_ocen[1:]:
+    #join lines with tab and add them to table
+    row = "    ".join(x)
+    table.textLine(row)
+    
+weighted_sum = [a * b for a,b in zip([float(i[2].replace(',','.')) for i in lista_ocen[2:]],[float(i[3].replace(',','.')) for i in lista_ocen[2:]])]
+table.textLine("Twoja srednia to:  {2.f}".format(str(sum(weighted_sum)/30)))
 
-# Container for 'Flowable' objects
-elements = []    
-
-# Open the model report
-infile   = lista_ocen
-report_paragraphs = lista_ocen
-
-for para in report_paragraphs:  
-    para1 = '<font face="Courier" >%s</font>' % para 
-    elements.append(Paragraph(para1, style=styleSheet['Normal']))
-doc.build(elements)
-
-"""
+#draw all lines to pdf
+pdf.drawText(table)
+pdf.showPage()
+pdf.save()
