@@ -6,6 +6,10 @@
     - kazdy kolejny element zawiera jeden wiersz w tabeli
       skladajacy sie na nazwe przedmiotu, prowadzacego, oceny i ECTS
 """
+import re
+
+filename = 'test.txt'
+
 def parse_edziekanat_grades(filename):
 
     #Wczytaj zawartosc pliku do listy
@@ -19,7 +23,6 @@ def parse_edziekanat_grades(filename):
     #Zmodyfikuj odczytana zawartosc aby usunac wiersze z datami
     #I zapisac kazdy wiersz pliku w jednej linijce (jednym elemencie tablicy)
     for i in range(0,len(content)-1): 
-        import re
         m = re.search(r'\bocena\b\s\bkoncowa\b',content[i])
         if m != None:
             newList.append(content[i][:-1] + content[i+1][10:-1])
@@ -42,3 +45,27 @@ def parse_edziekanat_grades(filename):
     
     #Zwracana lista
     return [[content[0]],[column_names[0],column_names[3],column_names[5],column_names[-1]]] + retlist
+
+def getName():
+
+    table = parse_edziekanat_grades(filename)
+
+    space = 0
+    name=""
+    surname=""
+    id_number=""
+
+    for i in range(3, len(table[0][0])):
+        if(re.search(r'\w', table[0][0][i])!=None):
+            if(space==0):
+                name += table[0][0][i]
+            if(space==1):
+                surname += table[0][0][i]
+        if(re.search(r' ', table[0][0][i])!=None):
+            space +=1
+        if(re.search(r'\xe2', table[0][0][i])!=None):
+            space = 3
+        if(re.search(r'\d', table[0][0][i])!=None):
+            id_number += table[0][0][i]
+    
+    return [name,surname,id_number]
