@@ -12,12 +12,12 @@ from reportlab.lib.units import cm, mm, inch, pica
 def create_PDF_file(handler):
 
     # Create new pdf document
-    pdf = Canvas("test.pdf", pagesize=letter)
+    pdf = Canvas("raport.pdf", pagesize=letter)
 
     # Set font and draw title
     pdf.setFont("Courier-Bold", 14)
     pdf.setStrokeColorRGB(1, 0, 0)
-    pdf.drawString(inch * 1, inch * 10, lista_ocen[0][0])
+    pdf.drawString(inch * 1, inch * 10, handler[0][0])
 
     # set font for rows with grades
     pdf.setFont("Courier-Bold", 12)
@@ -30,9 +30,9 @@ def create_PDF_file(handler):
         row = "    ".join(x)
         table.textLine(row)
 
-    weighted_sum = [a * b for a, b in zip([float(i[2].replace(',', '.')) for i in handler[2:]],
-                                      [float(i[3].replace(',', '.')) for i in handler[2:]])]
-    table.textLine("Twoja srednia to:  {2.f}".format(str(sum(weighted_sum) / 30)))
+    ## NOTE: tuple is out of range!!!
+    #weighted_sum = [a * b for a, b in zip([float(i[2].replace(',', '.')) for i in handler[2:]],[float(i[3].replace(',', '.')) for i in handler[2:]])]
+    #table.textLine("Twoja srednia to:  {2.f}".format(str(sum(weighted_sum) / 30)))
 
     # draw all lines to pdf
     pdf.drawText(table)
