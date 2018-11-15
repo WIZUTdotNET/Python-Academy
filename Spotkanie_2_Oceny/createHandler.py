@@ -1,7 +1,11 @@
 
 def loadFile(filename):
+
     content = ""
-    with open(filename) as f:
-        content += f.read() # każdy element to jeden wiersz
+    file = open(filename, encoding="utf-8")
+
+    with file as f:
+        content += f.read()
         f.close()
+
     return(content)
