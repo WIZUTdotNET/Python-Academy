@@ -4,37 +4,58 @@ Interesting pdf - creation :
 http://www.devshed.com/c/a/Python/Python-for-PDF-Generation/
 
 """
+# -*- coding: utf-8 -*-
+from reportlab.platypus import Table, TableStyle, Paragraph
+from reportlab.lib import colors
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.styles import getSampleStyleSheet
+import getStudentInformation as gsi
 
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import cm, mm, inch, pica
-
-def create_PDF_file(handler):
+def create_PDF_file(handler, grades_list, info, item_list):
 
     # Create new pdf document
-    pdf = Canvas("raport.pdf", pagesize=letter)
+    pdf = canvas.Canvas("raport.pdf", pagesize=A4)
+    width, height = A4
 
     # Set font and draw title
-    pdf.setFont("Courier-Bold", 14)
-    pdf.setStrokeColorRGB(1, 0, 0)
-    pdf.drawString(inch * 1, inch * 10, handler[0][0])
+    pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
 
-    # set font for rows with grades
-    pdf.setFont("Courier-Bold", 12)
-    pdf.setStrokeColorRGB(1, 0, 0)
-    # create handle used to add lines to pdf
-    table = pdf.beginText(inch * 1, inch * 9)
+    minus = 40
+    pdf.setFont("Arial", 14)
+    pdf.drawString(40,(height-minus), "Your name: " + str(info[0]) + " " + str(info[1]))
+    minus += 40
+    pdf.drawString(40,(height-minus), "Your student id: " + str(info[2]))
+    minus += 40
 
-    for x in handler[1:]:
-        # join lines with tab and add them to table
-        row = "    ".join(x)
-        table.textLine(row)
+    stylesheet=getSampleStyleSheet()
 
-    ## NOTE: tuple is out of range!!!
-    #weighted_sum = [a * b for a, b in zip([float(i[2].replace(',', '.')) for i in handler[2:]],[float(i[3].replace(',', '.')) for i in handler[2:]])]
-    #table.textLine("Twoja srednia to:  {2.f}".format(str(sum(weighted_sum) / 30)))
+    style1 = stylesheet['Normal']
+    style1.fontSize = 17
+    style1.fontName = 'Arial'
 
-    # draw all lines to pdf
-    pdf.drawText(table)
+    style2 = stylesheet['Normal']
+    style2.fontSize = 13
+    style2.fontName = 'Arial'
+
+    header = u'<para align="center">Subjets List</para>'
+
+    p1 = Paragraph(header, style1)
+    w,h = p1.wrap(width, height)
+    p1.drawOn(pdf, 0, height-minus)
+    minus += 30
+
+    for i in range(len(list(item_list))):
+        text = u'' + str(i+1) + '. ' + list(item_list)[i]
+        minus += 20
+        p = Paragraph(text, style2)
+        w,h = p.wrap(width, height)
+        p.drawOn(pdf, 40, height-minus)
+
+    minus += 40
+    pdf.drawString(40,(height-minus), 'Your weighted average of grades: ' + str(gsi.getAVG(handler)))
+
     pdf.showPage()
     pdf.save()
