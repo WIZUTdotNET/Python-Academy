@@ -6,7 +6,6 @@ http://www.devshed.com/c/a/Python/Python-for-PDF-Generation/
 """
 # -*- coding: utf-8 -*-
 from reportlab.platypus import Table, TableStyle, Paragraph
-from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
@@ -14,7 +13,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet
 import getStudentInformation as gsi
 
-def create_PDF_file(handler, grades_list, info, item_list):
+def createPDFFile(info, item_list, gradesAverage):
 
     # Create new pdf document
     pdf = canvas.Canvas("raport.pdf", pagesize=A4)
@@ -55,7 +54,7 @@ def create_PDF_file(handler, grades_list, info, item_list):
         p.drawOn(pdf, 40, height-minus)
 
     minus += 40
-    pdf.drawString(40,(height-minus), 'Your weighted average of grades: ' + str(gsi.getAVG(handler)))
+    pdf.drawString(40,(height-minus), 'Your weighted average of grades: ' + str(gradesAverage))
 
     pdf.showPage()
     pdf.save()
