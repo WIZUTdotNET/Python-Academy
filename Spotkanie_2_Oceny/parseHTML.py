@@ -14,6 +14,7 @@
     - [1] - Nazwisko
     - [2] - Nr albumu
 """
+
 from bs4 import BeautifulSoup
 import re
 
