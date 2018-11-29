@@ -12,8 +12,6 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import getSampleStyleSheet
 
-import getStudentInformation as gsi
-
 def createPDFFile(info, item_list, gradesAverage):
 
     # Create new pdf document
