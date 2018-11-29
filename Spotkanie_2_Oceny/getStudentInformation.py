@@ -16,17 +16,18 @@ def getItems(handler):
     return(set(items))
 
 def getAVG(handler):
-
+    pass
+    """
     table = getTable(handler)
 
     grades = []
     column = 5
 
     for i in range(1,len(table)-1):
-        regex = re.sub('\d\d.\d\d.\d\d$', '', table[i][column])
-        while(regex == '2'):
+        grades.append(table[i][column])
+        while(regex != r'\d'):
             column += 1
-            regex = re.sub('\d\d.\d\d.\d\d$', '', table[i][column])
+            grades.append(table[i][column])
         grades.append(regex)
         column = 5
 
@@ -45,3 +46,4 @@ def getAVG(handler):
     value = sum/ects_sum
 
     return(round(value,2))
+    """

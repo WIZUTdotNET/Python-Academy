@@ -19,7 +19,7 @@ def createPDFFile(info, item_list, gradesAverage):
     pdf = canvas.Canvas("raport.pdf", pagesize=A4)
     width, height = A4
 
-    # Set font and draw title
+    # Set font
     pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
 
     minus = 40
@@ -32,18 +32,17 @@ def createPDFFile(info, item_list, gradesAverage):
     stylesheet=getSampleStyleSheet()
 
     style1 = stylesheet['Normal']
-    style1.fontSize = 17
-    style1.fontName = 'Arial'
-
     style2 = stylesheet['Normal']
-    style2.fontSize = 13
-    style2.fontName = 'Arial'
+
+    style1.fontSize, style2.fontSize = 17, 13
+    style1.fontName, style2.fontName = 'Arial', 'Arial'
 
     header = u'<para align="center">Subjets List</para>'
 
     p1 = Paragraph(header, style1)
     w,h = p1.wrap(width, height)
     p1.drawOn(pdf, 0, height-minus)
+
     minus += 30
 
     for i in range(len(list(item_list))):
@@ -54,6 +53,7 @@ def createPDFFile(info, item_list, gradesAverage):
         p.drawOn(pdf, 40, height-minus)
 
     minus += 40
+    
     pdf.drawString(40,(height-minus), 'Your weighted average of grades: ' + str(gradesAverage))
 
     pdf.showPage()

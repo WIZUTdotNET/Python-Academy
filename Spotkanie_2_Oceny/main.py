@@ -1,13 +1,9 @@
 import createHandler as chand
-
 import parsemod as pd
 import parseHTML as phtml
-
 import getStudentInformation as gsi
-
 import createPDF as cpdf
 import createExcel as cxls
-
 import os
 
 #filename = "edziekanat_example.txt"

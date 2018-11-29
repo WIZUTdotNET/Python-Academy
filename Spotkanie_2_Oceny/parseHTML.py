@@ -37,6 +37,15 @@ def getTable(handler):
     for i in range(0, len(rows)-1):
         table.append([ td.text for td in soup.table('tr')[i]('td') ])
 
+    for j in range(len(table)):
+        for i in range(len(table[0])):
+            if i == 5 and j > 0 or i == 6 and j > 0 or i == 7 and j > 0:
+                regex = re.sub('\d\d.\d\d.\d\d$', '', table[j][i])
+                try:
+                    table[j][i] = float(regex)
+                except:
+                    table[j][i] = regex
+
     return(table)
 
 def getInfo(handler):
