@@ -44,7 +44,11 @@ def getTable(handler):
                 try:
                     table[j][i] = float(regex)
                 except:
-                    table[j][i] = regex
+                    try:
+                         regex = regex.replace(',','.')
+                         table[j][i] = float(regex)
+                    except:
+                        table[j][i] = regex
 
     return(table)
 

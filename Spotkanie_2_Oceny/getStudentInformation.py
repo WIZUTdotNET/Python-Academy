@@ -16,34 +16,31 @@ def getItems(handler):
     return(set(items))
 
 def getAVG(handler):
-    pass
-    """
+
     table = getTable(handler)
 
     grades = []
     column = 5
-
-    for i in range(1,len(table)-1):
-        grades.append(table[i][column])
-        while(regex != r'\d'):
-            column += 1
-            grades.append(table[i][column])
-        grades.append(regex)
-        column = 5
+    
+    for i in range(1, len(table)):
+        if isinstance(table[i][column], float):
+            while(table[i][column]==2.0):
+                column+=1
+            if isinstance(table[i][column], float):
+                grades.append(table[i][column])
+            else:
+                grades.append(0)
+            column = 5
+        else:
+            grades.append(0)
 
     sum = 0
     ects_sum = 0
 
-    for i in range(0, len(table)-2):
-        grades[i] = grades[i].replace(',','.')
-        try:
-            grades[i] = float(grades[i])
-            sum += float(table[i+1][10])*grades[i]
-            ects_sum += float(table[i+1][10])
-        except:
-            grades[i] == '0'
+    for i in range(len(table)-1):
+        sum += float(table[i+1][10])*grades[i]
+        ects_sum += float(table[i+1][10])
 
     value = sum/ects_sum
 
     return(round(value,2))
-    """
