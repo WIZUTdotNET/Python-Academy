@@ -1,3 +1,9 @@
+"""
+For creating main menu for this game you could use: 
+    https://github.com/ppizarror/pygame-menu
+
+"""
+
 from pygame.locals import QUIT,K_RIGHT,K_LEFT,K_UP,K_DOWN,K_ESCAPE
 import pygame
 from random import randint
